@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -9,6 +8,9 @@ export default function CharacterCreator({ addCharacter }) {
   const [glueck, setGlueck] = useState(1);
   const [charm, setCharm] = useState(1);
   const [portrait, setPortrait] = useState(null);
+
+  // 👇 NEW: state for collapsing the form
+  const [collapsed, setCollapsed] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -34,17 +36,35 @@ export default function CharacterCreator({ addCharacter }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="character-creator">
-      <strong style={{fontFamily:"Orbitron",letterSpacing:".04em"}}>Create Character</strong>
-      <input placeholder="Name" value={name} onChange={(e)=>setName(e.target.value)} required />
-      <textarea placeholder="Background Story" rows={3} value={background} onChange={(e)=>setBackground(e.target.value)} />
-      <div style={{display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"8px"}}>
-        <input placeholder="Geschick" type="number" min="1" max="6" value={geschick} onChange={(e)=>setGeschick(parseInt(e.target.value))} />
-        <input type="number" min="1" max="6" value={glueck} onChange={(e)=>setGlueck(parseInt(e.target.value))} placeholder="Glück" />
-        <input type="number" min="1" max="6" value={charm} onChange={(e)=>setCharm(parseInt(e.target.value))} placeholder="Charm" />
+    <div className="character-creator">
+      {/* Header with toggle button */}
+      <div style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
+        <strong style={{fontFamily:"Orbitron",letterSpacing:".04em"}}>
+          Create Character
+        </strong>
+        <button 
+          type="button" 
+          onClick={() => setCollapsed(!collapsed)} 
+          style={{background:"transparent", border:"none", fontSize:"1.5em", cursor:"pointer"}}
+        >
+          {collapsed ? "🔼" : "🔽"}
+        </button>
       </div>
-      <input type="file" accept="image/*" onChange={handleFile} />
-      <button type="submit">Charakter erstellen</button>
-    </form>
+
+      {/* Only show form if not collapsed */}
+      {!collapsed && (
+        <form onSubmit={handleSubmit}>
+          <input placeholder="Name" value={name} onChange={(e)=>setName(e.target.value)} required />
+          <textarea placeholder="Background Story" rows={3} value={background} onChange={(e)=>setBackground(e.target.value)} />
+          <div style={{display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"8px"}}>
+            <input placeholder="Geschick" type="number" min="1" max="6" value={geschick} onChange={(e)=>setGeschick(parseInt(e.target.value))} />
+            <input type="number" min="1" max="6" value={glueck} onChange={(e)=>setGlueck(parseInt(e.target.value))} placeholder="Glück" />
+            <input type="number" min="1" max="6" value={charm} onChange={(e)=>setCharm(parseInt(e.target.value))} placeholder="Charm" />
+          </div>
+          <input type="file" accept="image/*" onChange={handleFile} />
+          <button type="submit">Charakter erstellen</button>
+        </form>
+      )}
+    </div>
   );
 }

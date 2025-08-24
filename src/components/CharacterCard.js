@@ -6,7 +6,7 @@ export default function CharacterCard({ character, onClick }) {
   const mountRef = useRef();
 
   useEffect(() => {
-    const width = 120, height = 160;
+    const width = 142, height = 192;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, width/height, 0.1, 100);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -14,33 +14,39 @@ export default function CharacterCard({ character, onClick }) {
     mountRef.current.appendChild(renderer.domElement);
 
     // Neon-ish rim light
-    const light1 = new THREE.PointLight(0x8a2be2, 0.8, 20); light1.position.set(3, 3, 6); scene.add(light1);
-    const light2 = new THREE.PointLight(0x00e5ff, 0.7, 20); light2.position.set(-3, -2, 5); scene.add(light2);
+// Boosted lights for small portrait visibility
+const light1 = new THREE.PointLight(0xffffff, 2.0, 50); light1.position.set(3, 3, 6); scene.add(light1);
+const light2 = new THREE.PointLight(0x00e5ff, 1.8, 50); light2.position.set(-3, -2, 5); scene.add(light2);
+const ambient = new THREE.AmbientLight(0xffffff, 8.2, 100); scene.add(ambient);
 
-    // Create a plane for the portrait texture
-    const planeGeo = new THREE.PlaneGeometry(1.2, 1.6, 1, 1); // portrait aspect
-    let planeMat;
+    // Create a plane for the portrait textur
 
-    if (character.portrait) {
-      const loader = new THREE.TextureLoader();
-      const tex = loader.load(character.portrait);
-      tex.colorSpace = THREE.SRGBColorSpace;
-      planeMat = new THREE.MeshStandardMaterial({
-        map: tex,
-        metalness: 0.2,
-        roughness: 0.6,
-        transparent: true
-      });
-    } else {
-      const gradient = new THREE.CanvasTexture(makeGradient());
-      gradient.colorSpace = THREE.SRGBColorSpace;
-      planeMat = new THREE.MeshStandardMaterial({
-        map: gradient,
-        metalness: 0.2,
-        roughness: 0.5
-      });
-    }
 
+const planeGeo = new THREE.PlaneGeometry(1.42, 1.92, 1, 1);
+let planeMat;
+
+// placeholder gradient
+const gradient = new THREE.CanvasTexture(makeGradient());
+gradient.colorSpace = THREE.SRGBColorSpace;
+planeMat = new THREE.MeshStandardMaterial({
+  map: gradient,
+  metalness: .7,
+  roughness: 0.2,
+  emissive: 0xffffff,     // ⚡ boost visibility
+  emissiveIntensity: 0,
+  transparent: true
+});
+
+if (character.portrait) {
+  const loader = new THREE.TextureLoader();
+  loader.load(character.portrait, (tex) => {
+    tex.colorSpace = THREE.SRGBColorSpace;
+    planeMat.map = tex;
+    planeMat.emissive = new THREE.Color(0xffffff);    // ⚡ keeps portrait bright
+    planeMat.emissiveIntensity = 0;
+    planeMat.needsUpdate = true;
+  });
+}   
     const plane = new THREE.Mesh(planeGeo, planeMat);
     scene.add(plane);
 
@@ -56,8 +62,8 @@ export default function CharacterCard({ character, onClick }) {
     // Animate subtle sway & glow
     const animate = () => {
       requestAnimationFrame(animate);
-      plane.rotation.y = THREE.MathUtils.lerp(plane.rotation.y, hover ? 0.15 : 0.0, 0.08);
-      plane.rotation.x = THREE.MathUtils.lerp(plane.rotation.x, hover ? -0.06 : 0.0, 0.08);
+      plane.rotation.y = THREE.MathUtils.lerp(plane.rotation.y, hover ? 0.15 : 0.0, 0.8);
+      plane.rotation.x = THREE.MathUtils.lerp(plane.rotation.x, hover ? -0.07 : 0.0, 0.08);
       renderer.render(scene, camera);
     };
     animate();

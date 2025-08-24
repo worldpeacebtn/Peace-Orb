@@ -45,7 +45,7 @@ export default function CharacterCreator({ addCharacter }) {
         <button 
           type="button" 
           onClick={() => setCollapsed(!collapsed)} 
-          style={{background:"transparent", border:"none", fontSize:"1.5em", cursor:"pointer"}}
+          style={{bottom: "0px", background:"transparent", border:"none", fontSize:"1.5em", cursor:"pointer"}}
         >
           {collapsed ? "🔼" : "🔽"}
         </button>

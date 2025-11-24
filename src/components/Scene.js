@@ -23,6 +23,15 @@ const scenes = {
     text: "Du gehst die dunkle Straße entlang und hörst plötzlich ein Geräusch hinter dir.",
     img: exampleImg,
     choices: [
+      { text: "Schnell wegrennen", next: "scene4", reward: [] },
+      { text: "Nachsehen", next: "scene4", reward: [] }
+    ]
+  }
+};
+  scene4: {
+    text: "PROJEXT 42 - Guardian Angel me .",
+    img: exampleImg,
+    choices: [
       { text: "Schnell wegrennen", next: "scene5", reward: [] },
       { text: "Nachsehen", next: "scene4", reward: [] }
     ]

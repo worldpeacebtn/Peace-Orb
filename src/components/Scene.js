@@ -27,9 +27,18 @@ const scenes = {
       { text: "Nachsehen", next: "scene4", reward: [] }
     ]
   }
-};
+},
   scene4: {
     text: "PROJEXT 42 - Guardian Angel me .",
+    img: exampleImg,
+    choices: [
+      { text: "Schnell wegrennen", next: "scene5", reward: [] },
+      { text: "Nachsehen", next: "scene4", reward: [] }
+    ]
+  }
+},
+  scene5: {
+    text: "X 42 - Guardian Angel me .",
     img: exampleImg,
     choices: [
       { text: "Schnell wegrennen", next: "scene5", reward: [] },

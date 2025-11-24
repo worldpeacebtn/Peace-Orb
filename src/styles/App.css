@@ -77,9 +77,10 @@ body:before{
   position: fixed;
   top: 14px; right: 14px;
   width: min(420px, 92vw);
-  padding: 10px 12px;
+  padding: 1rem 1rem;
   z-index: 10;
-  display:grid; gap:8px;
+  display:contents;
+  gap:.9rem;
 }
 .character-creator input,
 .character-creator textarea,
